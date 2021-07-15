@@ -9,7 +9,7 @@ def get_coupon_code_length(length=12):
 
 
 def get_user_model():
-    return settings.AUTH_USER_MODEL
+    return settings.DSC_AUTH_USER_MODEL
 
 
 def get_random_code(length=12):
