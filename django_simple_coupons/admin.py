@@ -31,8 +31,20 @@ class RulesetAdmin(admin.ModelAdmin):
 
 @admin.register(CouponUser)
 class CouponUserAdmin(admin.ModelAdmin):
-    list_display = ('user', 'coupon', 'times_used', )
+    list_display = ('user', 'get_user_email', 'get_user_name', 'coupon', 'last_used', 'times_used', )
     actions = [reset_coupon_usage]
+
+    def get_user_email(self, obj):
+        return obj.user.email
+
+    get_user_email.short_description = 'User Email'
+    get_user_email.admin_order_field = 'user__email'
+
+    def get_user_name(self, obj):
+        return obj.user.first_name + " " + obj.user.last_name
+
+    get_user_name.short_description = 'User Name'
+    get_user_name.admin_order_field = 'user__first_name'
 
 
 @admin.register(AllowedUsersRule)

@@ -66,6 +66,7 @@ class CouponUser(models.Model):
     user = models.ForeignKey(user_model, on_delete=models.CASCADE, verbose_name="User")
     coupon = models.ForeignKey('Coupon', on_delete=models.CASCADE, verbose_name="Coupon")
     times_used = models.IntegerField(default=0, editable=False, verbose_name="Times used")
+    last_used = models.DateTimeField(blank=True, default=None, null=True, verbose_name="Last used")
 
     def __str__(self):
         return str(self.user)
@@ -106,6 +107,7 @@ class Coupon(models.Model):
     def use_coupon(self, user):
         coupon_user, created = CouponUser.objects.get_or_create(user=user, coupon=self)
         coupon_user.times_used += 1
+        coupon_user.last_used = timezone.now()
         coupon_user.save()
 
         self.times_used += 1
