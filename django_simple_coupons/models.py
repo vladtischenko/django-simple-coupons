@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
+from django.utils.translation import gettext_lazy as _
 from django_simple_coupons.helpers import (get_random_code,
                                            get_coupon_code_length,
                                            get_user_model)
@@ -98,8 +99,18 @@ class Coupon(models.Model):
     discount = models.ForeignKey('Discount', on_delete=models.CASCADE)
     times_used = models.IntegerField(default=0, editable=False, verbose_name="Times used")
     created = models.DateTimeField(editable=False, verbose_name="Created")
-
     ruleset = models.ForeignKey('Ruleset', on_delete=models.CASCADE, verbose_name="Ruleset")
+
+    class PurchasableObjects(models.TextChoices):
+        ALL_OBJECTS = 'ALL_OBJECTS', _('All objects')
+        CONSULTATION = 'CONSULTATION', _('Consultation')
+        CLIENT_CONSULTATION_PACKAGE = 'CLIENT_CONSULTATION_PACKAGE', _('Client Consultation Package')
+
+    applicable_for = models.CharField(
+        max_length=32,
+        choices=PurchasableObjects.choices,
+        default=PurchasableObjects.ALL_OBJECTS,
+    )
 
     def __str__(self):
         return self.code

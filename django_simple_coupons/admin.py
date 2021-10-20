@@ -15,7 +15,7 @@ from django_simple_coupons.actions import (reset_coupon_usage, delete_expired_co
 # ==========================
 @admin.register(Coupon)
 class CouponAdmin(admin.ModelAdmin):
-    list_display = ('code', 'discount', 'ruleset', 'times_used', 'created', )
+    list_display = ('code', 'discount', 'ruleset', 'times_used', 'applicable_for', 'created', )
     actions = [delete_expired_coupons]
 
 
