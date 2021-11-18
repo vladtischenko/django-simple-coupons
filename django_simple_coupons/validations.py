@@ -41,12 +41,6 @@ def validate_max_uses_rule(coupon_object, user):
     return True
 
 
-def validate_applicable_to_rule(coupon_object, user, applied_to):
-    if applied_to in coupon_object.applicable_to:
-        return True
-
-    return False
-
 def validate_validity_rule(coupon_object):
     validity_rule = coupon_object.ruleset.validity
     if timezone.now() > validity_rule.expiration_date:
@@ -55,7 +49,7 @@ def validate_validity_rule(coupon_object):
     return validity_rule.is_active
 
 
-def validate_coupon(coupon_code, user, applied_to):
+def validate_coupon(coupon_code, user):
     if not coupon_code:
         return assemble_invalid_message(message="No coupon code provided!")
 
@@ -74,10 +68,6 @@ def validate_coupon(coupon_code, user, applied_to):
     valid_max_uses_rule = validate_max_uses_rule(coupon_object=coupon_object, user=user)
     if not valid_max_uses_rule:
         return assemble_invalid_message(message="Coupon uses exceeded for this user!")
-
-    valid_applicable_to_rule = validate_applicable_to_rule(coupon_object=coupon_object, user=user, applied_to=applied_to)
-    if not valid_applicable_to_rule:
-        return assemble_invalid_message(message="Coupon cannot be applied to this object!")
 
     valid_validity_rule = validate_validity_rule(coupon_object=coupon_object)
     if not valid_validity_rule:

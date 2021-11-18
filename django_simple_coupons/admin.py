@@ -16,23 +16,8 @@ from django_simple_coupons.actions import (reset_coupon_usage, delete_expired_co
 # ==========================
 @admin.register(Coupon)
 class CouponAdmin(admin.ModelAdmin):
-    list_display = ('code', 'discount', 'ruleset', 'times_used', 'applicable_to', 'created', )
+    list_display = ('code', 'discount', 'ruleset', 'times_used', 'custom_setting', 'created', )
     actions = [delete_expired_coupons]
-
-    fieldsets = [
-        (None, {"fields": ["code", "discount", "ruleset", "times_used", "created"]}),
-        (
-            "This Coupon Applicable To",
-            {
-                "fields": ["applicable_to"],
-                "description": f"Purchasable objects comma separated. Options: {', '.join(settings.PURCHASABLE_OBJECTS.values())}",
-            },
-        ),
-    ]
-    readonly_fields = [
-        "times_used",
-        "created"
-    ]
 
 
 @admin.register(Discount)

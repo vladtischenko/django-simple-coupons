@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
@@ -5,7 +6,10 @@ from django.utils.translation import gettext_lazy as _
 from django_simple_coupons.helpers import (get_random_code,
                                            get_coupon_code_length,
                                            get_user_model)
-from django.contrib.postgres.fields import ArrayField
+
+
+def get_applicable_to_default():
+    return []
 
 
 # Create your models here.
@@ -93,10 +97,6 @@ class Discount(models.Model):
         verbose_name_plural = "Discounts"
 
 
-def get_applicable_to_default():
-    return []
-
-
 class Coupon(models.Model):
     code_length = get_coupon_code_length()
 
@@ -105,10 +105,7 @@ class Coupon(models.Model):
     times_used = models.IntegerField(default=0, editable=False, verbose_name="Times used")
     created = models.DateTimeField(editable=False, verbose_name="Created")
     ruleset = models.ForeignKey('Ruleset', on_delete=models.CASCADE, verbose_name="Ruleset")
-    applicable_to = ArrayField(
-        models.CharField(max_length=64),
-        default=get_applicable_to_default,
-    )
+    custom_setting = models.ForeignKey(settings.CUSTOM_COUPON_SETTING_MODEL, on_delete=models.SET_NULL, verbose_name="CustomSetting", blank=True, null=True)
 
     def __str__(self):
         return self.code
